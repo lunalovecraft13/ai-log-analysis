@@ -1,26 +1,30 @@
-# test/test_app.py
+# Import the unittest framework and the analyze_logs function from your app script
+import unittest
+from dev.app import analyze_logs  # Adjust path if needed
 
-# Import the function we want to test
-from dev.app import detect_anomalies
+# Define a test case class for testing the log analysis function
+class TestLogAnalysis(unittest.TestCase):
 
-# Test to ensure that error messages are correctly flagged
-def test_detects_errors():
-    logs = [
-        "INFO Normal event",                      # Normal log (shouldn't be flagged)
-        "ERROR Database failure"                  # Error log (should be flagged)
-    ]
-    result = detect_anomalies(logs)
-    
-    # Check that at least one flagged result contains "ERROR"
-    assert any("ERROR" in line for line in result)
+    # This test checks whether error logs are correctly detected from a sample list
+    def test_detect_error_logs(self):
+        # Sample logs: a mix of INFO, WARNING, and ERROR messages
+        sample_logs = [
+            "INFO: Boot complete",
+            "ERROR: Database connection failed",
+            "WARNING: High memory usage",
+            "ERROR: Unauthorized access attempt"
+        ]
 
-# Test to ensure that high response times are flagged as anomalies
-def test_detects_high_latency():
-    logs = [
-        "INFO Response time: 999ms",              # Below threshold, not flagged
-        "INFO Response time: 3200ms"              # Above threshold, should be flagged
-    ]
-    result = detect_anomalies(logs)
-    
-    # Check that at least one flagged result mentions response time
-    assert any("response time" in line for line in result)
+        # Call the analyze_logs function with the sample logs
+        results = analyze_logs(sample_logs)
+
+        # There should be exactly 2 error logs detected
+        self.assertEqual(len(results), 2)
+
+        # The following specific error messages should be in the results
+        self.assertIn("ERROR: Database connection failed", results)
+        self.assertIn("ERROR: Unauthorized access attempt", results)
+
+# This makes sure the tests run when the file is executed directly
+if __name__ == '__main__':
+    unittest.main()
