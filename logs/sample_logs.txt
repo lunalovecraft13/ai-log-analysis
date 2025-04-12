@@ -1,0 +1,5 @@
+[INFO] 2025-04-12 10:00:00 - System boot complete
+[ERROR] 2025-04-12 10:01:00 - Database connection failed
+[INFO] 2025-04-12 10:02:00 - User login successful
+[CRITICAL] 2025-04-12 10:03:00 - Unauthorized access attempt detected
+[WARNING] 2025-04-12 10:04:00 - Disk space at 85%
