@@ -1,40 +1,58 @@
-def main():
-    print("🚀 Test environment deployment started...")
-    print(f"🔧 Python Version: {platform.python_version()}\n")
+# dev/app.py
 
-    # Step 1: Load log entries
-    log_file = "logs/sample_logs.txt"
-    print(f"📄 Reading logs from: {log_file}")
-    raw_logs = read_log_file(log_file)
+import platform
 
-    # Step 2: Analyze anomalies
-    print("🧠 Detecting anomalies...\n")
-    anomalies = analyze_logs(raw_logs)
-
-    if anomalies:
-        print(f"❗ Anomalies Found ({len(anomalies)}):")
-        for a in anomalies:
-            print(f"   {a}")
-    else:
-        print("✅ No anomalies detected.")
-
-    # Step 3: Count log types
+# ✅ Define the function so test_app.py can import it
+def analyze_logs(logs):
+    anomalies = []
     severity_counts = {
         "INFO": 0,
         "WARNING": 0,
-        "ERROR": 0,
-        "CRITICAL": 0
+        "ERROR": 0
     }
 
-    for line in raw_logs:
-        for key in severity_counts:
-            if key in line:
-                severity_counts[key] += 1
+    for line in logs:
+        line = line.strip()
+        if "ERROR" in line:
+            anomalies.append(line)
+            severity_counts["ERROR"] += 1
+        elif "WARNING" in line:
+            anomalies.append(line)
+            severity_counts["WARNING"] += 1
+        elif "INFO" in line:
+            severity_counts["INFO"] += 1
 
-    # Step 4: Print summary
-    print("\n📊 Log Summary:")
-    for level, count in severity_counts.items():
-        print(f"- {level}: {count} entries")
+    return anomalies, severity_counts
 
-    print("\n📦 Application Version: 1.0.0 (Test Stage Build)")
+
+# 👇 Main script for running in the terminal or deployment simulation
+if __name__ == "__main__":
+    print("🚀 Test environment deployment started...")
+    print(f"🔧 Python Version: {platform.python_version()}\n")
+
+    log_file = "logs/sample_logs.txt"
+    print(f"📄 Reading logs from: {log_file}")
+
+    try:
+        with open(log_file, 'r') as file:
+            log_lines = file.readlines()
+    except FileNotFoundError:
+        print(f"❌ Log file not found: {log_file}")
+        log_lines = []
+
+    print("🔍 Detecting anomalies...")
+    anomalies, counts = analyze_logs(log_lines)
+
+    if anomalies:
+        print("🚨 Anomalies detected:")
+        for anomaly in anomalies:
+            print(f" - {anomaly}")
+    else:
+        print("✅ No anomalies detected.")
+
+    print("\n📊 Summary:")
+    for level, count in counts.items():
+        print(f" - {level}: {count} entries")
+
+    print("\n🧪 Application Version: 1.0.0 (Test Stage Build)")
     print("✅ Log analysis complete. Test stage deployment successful.")
