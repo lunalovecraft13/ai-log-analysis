@@ -1,49 +1,44 @@
-# This GitHub Actions workflow promotes the application to the Test stage.
-# It runs every time code is pushed to the main branch.
+# GitHub Actions workflow to promote application code to the Test environment
 
 name: Promote to Test Stage
 
+# Trigger this workflow whenever code is pushed to the 'main' branch
 on:
   push:
     branches:
-      - main  # Only run this workflow when code is pushed to the main branch
+      - main
 
 jobs:
   promote-to-test:
-    runs-on: ubuntu-latest  # GitHub will use a virtual Ubuntu machine
+    runs-on: ubuntu-latest  # Run this job on a cloud-based Ubuntu runner
 
     steps:
-      # Step 1: Check out the repository code into the virtual machine
+      # Step 1: Checkout the latest code from the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up the Python environment (Python 3.11)
+      # Step 2: Set up a Python 3.11 environment
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'  # Ensure a modern version of Python
+          python-version: '3.11'  # This version is fully supported in GitHub Actions
 
-      # Step 3: Install dependencies from requirements.txt (if it exists)
+      # Step 3: Install required dependencies listed in requirements.txt (if it exists)
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # Only install dependencies if requirements.txt exists
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # Step 4: Run unit tests to validate application logic
+      # Step 4: Run all unit tests to validate logic before promotion
       - name: Run unit tests
         run: |
           echo "🔍 Running unit tests..."
-          # Discover and execute all test cases inside the /test directory
           python -m unittest discover -s test
 
-      # Step 5: Simulate deployment to the Test environment
+      # Step 5: Simulate promoting to the Test environment
       - name: Simulate deployment
         run: |
           echo "🚀 Promoting application to the Test stage..."
-          # Run the main application script as part of the simulated promotion
-          python dev/app.py
-          echo "✅ Deployment simulated successfully."
-
-          # Output version information to simulate build/release tagging
-          echo "📦 App version: 1.0.0 (Test Build)"
+          python dev/app.py  # Main script for log analysis simulation
+          echo "✅ Promotion successful."
+          echo "📦 App Version: 1.0.0 (Test Build)"
