@@ -1,35 +1,35 @@
-# This GitHub Action automates the process of simulating code promotion to the "Test" environment
+# This workflow is triggered every time you push to the main branch
 name: Promote to Test Stage
 
-# Trigger the workflow every time code is pushed to the main branch
 on:
   push:
     branches:
-      - main  # You can change this if your dev branch has a different name
+      - main  # Only run this workflow on pushes to the main branch
 
 jobs:
   promote-to-test:
-    runs-on: ubuntu-latest  # This job runs on a virtual Ubuntu machine
+    runs-on: ubuntu-latest  # Use the latest stable Ubuntu runner
 
     steps:
-      # Step 1: Checkout the repository code so it can be used in the workflow
-      - name: Checkout repository
+      # Step 1: Checkout the repository code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python environment
+      # Step 2: Set up the Python environment
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10  # You can change this to match your project's version
+          python-version: '3.11'  # Make sure this version exists on GitHub (this one does!)
 
-      # Step 3: Install all dependencies listed in requirements.txt
+      # Step 3: Install dependencies listed in requirements.txt
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip  # Ensure pip is up-to-date
-          pip install -r requirements.txt      # Install dependencies for the project
+          python -m pip install --upgrade pip
+          # Only install dependencies if requirements.txt exists
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # Step 4: Simulate promotion to the Test environment
-      - name: Run promotion logic
+      # Step 4: Run your script to simulate promoting to the Test stage
+      - name: Run promotion script
         run: |
-          echo "✅ Code successfully promoted to the Test stage."
-          echo "Simulating integration tests, static checks, or validations..."
+          echo "🚀 Promoting application to the Test stage..."
+          python dev/app.py  # Make sure this is the correct script path
