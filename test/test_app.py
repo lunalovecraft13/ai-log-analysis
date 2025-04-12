@@ -1,43 +1,39 @@
 import sys
 import os
-import unittest  # Python’s built-in testing framework
+import unittest  # Built-in unit testing framework
 
-# === PATH SETUP =============================================================
-# Ensure the 'dev' directory is in the system path so that 'app.py' can be imported
-# This is especially useful when running tests via CI/CD environments like GitHub Actions
+# 👇 Add 'dev' folder to the Python path so app.py can be imported from it
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../dev')))
 
-current_dir = os.path.dirname(__file__)                 # The directory this test file is in
-dev_path = os.path.abspath(os.path.join(current_dir, '..', 'dev'))  # Path to 'dev/' folder
-sys.path.insert(0, dev_path)                            # Add to import path
-
-# === MODULE UNDER TEST ======================================================
-# Now that the path is set up, import the function we want to test
-from app import analyze_logs  # Assumes dev/app.py defines analyze_logs()
+# 👇 Import the function we want to test from app.py
+from app import analyze_logs
 
 
-# === UNIT TESTS =============================================================
+# 👇 Define a test case class by extending unittest.TestCase
 class TestLogAnalyzer(unittest.TestCase):
-    """
-    Unit tests for the log analysis functionality.
-    """
 
+    # 👇 Test that known ERROR log is detected as an anomaly
     def test_detect_anomaly(self):
-        """
-        Test that 'analyze_logs' correctly identifies an error line as an anomaly.
-        """
-        sample_logs = [
-            "INFO: All systems go",
-            "ERROR: Disk space critically low",  # This should be flagged
-            "INFO: Still running"
+        logs = [
+            "INFO: System boot complete",
+            "ERROR: Disk space critically low",
+            "INFO: Update check complete"
         ]
+        anomalies, severity_counts = analyze_logs(logs)
 
-        result = analyze_logs(sample_logs)
+        # ✅ Make sure the ERROR log was detected as an anomaly
+        self.assertIn("ERROR: Disk space critically low", anomalies)
 
-        # Assert the expected anomaly is found
-        self.assertIn("ERROR: Disk space critically low", result)
+        # ✅ Also make sure severity count is correct (1 error, 2 info)
+        self.assertEqual(severity_counts["ERROR"], 1)
+        self.assertEqual(severity_counts["INFO"], 2)
+        self.assertEqual(severity_counts["WARNING"], 0)
+
+    # 👇 You can add more tests here if you want to expand coverage!
+    # def test_detect_warning(self):
+    #     ...
 
 
-# === ENTRY POINT =============================================================
-# This makes the test file executable directly: `python test_app.py`
+# 👇 Run the test only when this script is called directly
 if __name__ == '__main__':
     unittest.main()
