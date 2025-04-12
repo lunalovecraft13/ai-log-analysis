@@ -1,43 +1,49 @@
 # dev/app.py
 
-"""
-AI Log Analysis - Core Logic
-
-This module provides basic log parsing functionality. 
-It flags log lines as anomalies if they contain the keyword 'ERROR'.
-"""
+import platform
+import re
+import os
 
 def analyze_logs(log_lines):
     """
-    Analyze a list of log entries and detect anomalies.
-
-    Args:
-        log_lines (list): A list of strings, each representing a log entry.
-
-    Returns:
-        list: A list of log lines that are considered anomalies.
-              Currently, any line containing the word 'ERROR' is flagged.
+    Returns a list of anomalies (lines with 'ERROR' or 'CRITICAL').
     """
-    anomalies = []
+    return [line.strip() for line in log_lines if 'ERROR' in line or 'CRITICAL' in line]
 
-    for line in log_lines:
-        if 'ERROR' in line:
-            anomalies.append(line)  # Flag line as an anomaly
-
-    return anomalies
-
-
-# Optional: You can run this file directly to test its output manually.
-if __name__ == "__main__":
-    sample_logs = [
-        "INFO: System boot complete",
-        "WARNING: CPU usage at 85%",
-        "ERROR: Failed to initialize disk",
-        "INFO: Monitoring active"
-    ]
-
-    flagged = analyze_logs(sample_logs)
+def read_log_file(filepath):
+    """
+    Reads log entries from a text file.
+    """
+    if not os.path.exists(filepath):
+        print(f"❌ Log file not found: {filepath}")
+        return []
     
-    print("🚨 Detected Anomalies:")
-    for line in flagged:
-        print(line)
+    with open(filepath, 'r') as f:
+        return f.readlines()
+
+def main():
+    print("🚀 Test environment deployment started...")
+    print(f"🔧 Python Version: {platform.python_version()}\n")
+
+    # Step 1: Load log entries
+    log_file = "sample_logs.txt"  # or "logs/sample_logs.txt" if you use a folder
+    print(f"📄 Reading logs from: {log_file}")
+    raw_logs = read_log_file(log_file)
+
+    # Step 2: Analyze the logs
+    print("🧠 Detecting anomalies...\n")
+    anomalies = analyze_logs(raw_logs)
+
+    # Step 3: Print results
+    if anomalies:
+        print(f"❗ Anomalies Found ({len(anomalies)}):")
+        for a in anomalies:
+            print(f"   {a}")
+    else:
+        print("✅ No anomalies detected.")
+
+    print("\n📦 Application Version: 1.0.0 (Test Stage Build)")
+    print("✅ Log analysis complete. Test stage deployment successful.")
+
+if __name__ == "__main__":
+    main()
