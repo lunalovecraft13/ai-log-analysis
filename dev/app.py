@@ -26,7 +26,7 @@ def main():
     print(f"🔧 Python Version: {platform.python_version()}\n")
 
     # Step 1: Load log entries
-    log_file = "sample_logs.txt"  # or "logs/sample_logs.txt" if you use a folder
+    log_file = "logs/sample_logs.txt"  # or "logs/sample_logs.txt" if you use a folder
     print(f"📄 Reading logs from: {log_file}")
     raw_logs = read_log_file(log_file)
 
