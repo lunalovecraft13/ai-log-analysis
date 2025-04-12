@@ -1,5 +1,10 @@
-[INFO] 2025-04-12 10:00:00 - System boot complete
-[ERROR] 2025-04-12 10:01:00 - Database connection failed
-[INFO] 2025-04-12 10:02:00 - User login successful
-[CRITICAL] 2025-04-12 10:03:00 - Unauthorized access attempt detected
-[WARNING] 2025-04-12 10:04:00 - Disk space at 85%
+[INFO] 2025-04-12 10:00:00 - Application started
+[INFO] 2025-04-12 10:00:10 - Connection to database established
+[WARNING] 2025-04-12 10:01:00 - High memory usage detected
+[ERROR] 2025-04-12 10:01:45 - Failed to write to disk
+[INFO] 2025-04-12 10:02:15 - Scheduled backup initiated
+[CRITICAL] 2025-04-12 10:03:30 - Unauthorized access attempt detected
+[WARNING] 2025-04-12 10:04:00 - Disk space low
+[INFO] 2025-04-12 10:04:30 - Email notifications sent
+[ERROR] 2025-04-12 10:05:10 - Timeout while contacting remote server
+[INFO] 2025-04-12 10:06:00 - Application shutdown sequence started
