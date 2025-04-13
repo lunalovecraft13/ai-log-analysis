@@ -1,8 +1,11 @@
 # dev/app.py
 
+import os
+import sys
 import platform
+import matplotlib.pyplot as plt
 
-# ✅ Define the function so test_app.py can import it
+# Function to analyze logs for anomalies and count severity levels
 def analyze_logs(logs):
     anomalies = []
     severity_counts = {
@@ -24,35 +27,54 @@ def analyze_logs(logs):
 
     return anomalies, severity_counts
 
+# Function to display the severity counts as a bar chart
+def plot_severity_counts(severity_counts):
+    labels = list(severity_counts.keys())
+    counts = list(severity_counts.values())
 
-# 👇 Main script for running in the terminal or deployment simulation
-if __name__ == "__main__":
+    plt.figure(figsize=(6, 4))
+    plt.bar(labels, counts, color="skyblue")
+    plt.title("Log Severity Levels")
+    plt.xlabel("Severity")
+    plt.ylabel("Count")
+    plt.tight_layout()
+    plt.show()
+
+# Main function to simulate test stage deployment
+def main():
     print("🚀 Test environment deployment started...")
-    print(f"🔧 Python Version: {platform.python_version()}\n")
+    print(f"🛠️ Python Version: {platform.python_version()}")
+    
+    log_file = "logs/sample_logs.txt"  # Update this path if your file is elsewhere
 
-    log_file = "logs/sample_logs.txt"
-    print(f"📄 Reading logs from: {log_file}")
-
-    try:
-        with open(log_file, 'r') as file:
-            log_lines = file.readlines()
-    except FileNotFoundError:
+    print(f"\n📄 Reading logs from: {log_file}")
+    if not os.path.exists(log_file):
         print(f"❌ Log file not found: {log_file}")
-        log_lines = []
+        return
 
-    print("🔍 Detecting anomalies...")
-    anomalies, counts = analyze_logs(log_lines)
+    with open(log_file, "r") as f:
+        logs = f.readlines()
+
+    print("🔎 Detecting anomalies...")
+    anomalies, severity_counts = analyze_logs(logs)
 
     if anomalies:
-        print("🚨 Anomalies detected:")
-        for anomaly in anomalies:
-            print(f" - {anomaly}")
+        print(f"⚠️ {len(anomalies)} anomalies detected:")
+        for a in anomalies:
+            print(f"  → {a}")
     else:
         print("✅ No anomalies detected.")
 
-    print("\n📊 Summary:")
-    for level, count in counts.items():
-        print(f" - {level}: {count} entries")
+    # Show severity counts
+    print("\n📊 Summary of log severities:")
+    for level, count in severity_counts.items():
+        print(f"  - {level}: {count} entries")
 
-    print("\n🧪 Application Version: 1.0.0 (Test Stage Build)")
+    # Plot chart
+    plot_severity_counts(severity_counts)
+
+    print("\n📦 Application Version: 1.0.1 (Test Stage Build)")
     print("✅ Log analysis complete. Test stage deployment successful.")
+
+if __name__ == "__main__":
+    main()
