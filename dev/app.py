@@ -42,8 +42,23 @@ def plot_severity_counts(severity_counts):
     plt.savefig("log_severity_summary.png")  # 📂 Save chart as image file
     plt.show()  # Display chart in a new window
 
+# 🥧 Plot and save a pie chart of the severity distribution
+# Saves the chart as 'log_severity_pie_chart.png'
+def plot_pie_chart(severity_counts):
+    labels = severity_counts.keys()
+    sizes = severity_counts.values()
+    colors = ['#66b3ff', '#ffcc99', '#ff6666']  # INFO, WARNING, ERROR
+
+    plt.figure(figsize=(6, 6))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
+    plt.title('Log Severity Distribution')
+    plt.axis('equal')  # Makes the pie chart a circle
+    plt.savefig("log_severity_pie_chart.png")  # 📂 Save pie chart as image
+    print("🖼️ Pie chart saved as log_severity_pie_chart.png")
+    plt.show()
+
 # ⚙️ Main function that simulates the Test Stage
-# Loads the logs, analyzes them, prints results, and generates a chart
+# Loads the logs, analyzes them, prints results, and generates charts
 def main():
     print("\n🚀 Test environment deployment started...")
     print(f"⚒️ Python Version: {platform.python_version()}")
@@ -79,8 +94,9 @@ def main():
 
     print("\n📊 Log analysis complete. Test stage deployment successful.")
 
-    # Generate and save the severity chart
+    # Generate and save the bar and pie charts
     plot_severity_counts(severity_counts)
+    plot_pie_chart(severity_counts)
 
 # 🔁 Entry point of the script
 if __name__ == "__main__":
