@@ -1,0 +1,4 @@
+[WARNING] 2025-04-12 10:01:00 - High memory usage detected
+[ERROR] 2025-04-12 10:01:45 - Failed to write to disk
+[WARNING] 2025-04-12 10:04:00 - Disk space low
+[ERROR] 2025-04-12 10:05:10 - Timeout while contacting remote server
