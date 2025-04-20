@@ -1,17 +1,15 @@
 # dev/app.py
 
 import os
+import sys
 import platform
 import matplotlib.pyplot as plt
 
-# 🔍 Analyze logs and count severity levels
+# 📊 Analyze logs and count severity levels
+# Returns a tuple of (anomalies list, severity_counts dictionary)
 def analyze_logs(logs):
     anomalies = []
-    severity_counts = {
-        "INFO": 0,
-        "WARNING": 0,
-        "ERROR": 0
-    }
+    severity_counts = {"INFO": 0, "WARNING": 0, "ERROR": 0}
 
     for line in logs:
         line = line.strip()
@@ -26,7 +24,8 @@ def analyze_logs(logs):
 
     return anomalies, severity_counts
 
-# 📘 Print logs with annotations and line numbers
+# 📄 Display logs with line numbers and highlight anomalies
+# Optionally filters based on severity level
 def display_logs_with_annotations(logs, filter_level=None):
     print("\n📘 Log File Contents (with annotations):\n")
     for i, line in enumerate(logs, start=1):
@@ -38,7 +37,7 @@ def display_logs_with_annotations(logs, filter_level=None):
         else:
             print(f"{i:03d}:     {line}")
 
-# 📊 Save a bar chart of severity counts
+# 📊 Generate and save a bar chart showing severity counts
 def plot_severity_counts(severity_counts):
     labels = list(severity_counts.keys())
     counts = list(severity_counts.values())
@@ -52,7 +51,7 @@ def plot_severity_counts(severity_counts):
     plt.savefig("log_severity_summary.png")
     plt.show()
 
-# 🥧 Save a pie chart showing severity percentages
+# 🥧 Generate and save a pie chart for severity distribution
 def plot_pie_chart(severity_counts):
     labels = severity_counts.keys()
     sizes = severity_counts.values()
@@ -66,29 +65,33 @@ def plot_pie_chart(severity_counts):
     print("🖼️ Pie chart saved as log_severity_pie_chart.png")
     plt.show()
 
-# 📝 Save anomalies to a report file
+# 📝 Save anomalies to a text file
 def export_anomalies(anomalies, filename="anomalies_report.txt"):
     with open(filename, "w") as f:
         for entry in anomalies:
             f.write(entry + "\n")
     print(f"\n📝 Anomalies written to {filename}")
 
-# ⚙️ Main driver
+# 🧠 Check if the script is running in an interactive terminal
+def is_interactive():
+    return sys.stdin.isatty()
+
+# 🚀 Main driver function
 def main():
     print("\n🚀 Log Analyzer: Test Environment Deployment")
-    print(f"⚒️ Python Version: {platform.python_version()}")
+    print(f"🐍 Python Version: {platform.python_version()}")
 
-    # 🔄 Prompt for user input
-    severity_input = input("\n🔍 Enter severity to filter (INFO, WARNING, ERROR, or leave blank for all): ").strip().upper()
-    filter_level = severity_input if severity_input in ["INFO", "WARNING", "ERROR"] else None
+    # 🤔 Optional severity filtering if interactive
+    filter_level = None
+    export_choice = "no"
+    if is_interactive():
+        severity_input = input("\n🔍 Enter severity to filter (INFO, WARNING, ERROR, or leave blank for all): ").strip().upper()
+        filter_level = severity_input if severity_input else None
+        export_choice = input("📝 Export anomalies to file? (yes/no): ").strip().lower()
 
-    export_choice = input("\n📝 Export anomalies to file? (yes/no): ").strip().lower()
-    export_enabled = export_choice in ["yes", "y"]
-
-    # 📂 Define log file location
+    # 📂 Log file path
     log_file = "logs/sample_logs.txt"
     print(f"\n📄 Reading logs from: {log_file}")
-
     if not os.path.exists(log_file):
         print(f"❌ Log file not found: {log_file}")
         return
@@ -96,10 +99,10 @@ def main():
     with open(log_file, "r") as file:
         logs = file.readlines()
 
-    # 📋 Show logs
+    # 🔍 Show filtered logs with line numbers
     display_logs_with_annotations(logs, filter_level)
 
-    # 🚨 Analyze and summarize
+    # 📊 Analyze log contents
     anomalies, severity_counts = analyze_logs(logs)
 
     print("\n🔹 Summary:")
@@ -110,16 +113,15 @@ def main():
         print("\n🚨 Anomalies Detected:")
         for entry in anomalies:
             print(f"  - {entry}")
-        if export_enabled:
+        if export_choice == "yes":
             export_anomalies(anomalies)
     else:
         print("\n✅ No anomalies detected.")
 
-    print("\n📊 Generating charts...")
+    print("\n📈 Generating visualizations...")
     plot_severity_counts(severity_counts)
     plot_pie_chart(severity_counts)
-    print("\n✅ Test stage deployment complete.")
 
-# 🔁 Entry point
+# 🔁 Script entry point
 if __name__ == "__main__":
     main()
