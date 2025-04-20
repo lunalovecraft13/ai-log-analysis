@@ -27,6 +27,16 @@ def analyze_logs(logs):
 
     return anomalies, severity_counts
 
+# 📋 Display each log line with line numbers and highlight anomalies in the CLI output
+def display_logs_with_annotations(logs):
+    print("\n📘 Log File Contents (with annotations):\n")
+    for i, line in enumerate(logs, start=1):
+        line = line.strip()
+        if "ERROR" in line or "WARNING" in line:
+            print(f"{i:03d}: 🚨 {line}")
+        else:
+            print(f"{i:03d}:     {line}")
+
 # 🌈 Plot and save a bar chart of the severity counts
 # Saves the chart as 'log_severity_summary.png' and also displays it visually
 def plot_severity_counts(severity_counts):
@@ -75,6 +85,9 @@ def main():
     # Read all lines from the log file
     with open(log_file, "r") as file:
         logs = file.readlines()
+
+    # 🧾 Display annotated log lines
+    display_logs_with_annotations(logs)
 
     print("🔎 Detecting anomalies...")
     anomalies, severity_counts = analyze_logs(logs)
