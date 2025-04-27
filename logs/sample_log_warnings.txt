@@ -1,0 +1,10 @@
+INFO: System boot sequence initiated.
+WARNING: Memory usage at 80%.
+INFO: CPU temperature normal.
+WARNING: Network latency above normal thresholds.
+INFO: Routine disk check completed.
+WARNING: User authentication attempts exceeded threshold.
+INFO: Backup service initialized.
+WARNING: Low disk space on partition /dev/sda1.
+INFO: Scheduled maintenance window starting soon.
+WARNING: API response time degrading.
