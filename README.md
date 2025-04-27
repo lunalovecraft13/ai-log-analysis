@@ -1,94 +1,67 @@
-# 🔍 AI Log Analysis – DevOps Test Promotion Pipeline
+# AI-Powered Log Analysis & Error Detection System
 
-Welcome to the **AI Log Analysis System** — a simulated DevOps environment designed to demonstrate CI/CD integration, automated testing, and anomaly detection in system logs using Python and GitHub Actions.
+This project is an interactive command-line log analysis tool that uses Python to detect anomalies, filter by severity, generate visual reports, and export results. It is designed to simulate a "Test Stage" environment within a DevOps pipeline and can be easily extended for real-time monitoring or dashboard integration.
 
----
+## 🔧 Features
+- Reads structured log data from a file
+- Annotated line-by-line log display with severity indicators
+- Optional filtering by severity level (INFO, WARNING, ERROR)
+- Anomaly detection for WARNING and ERROR logs
+- Exports anomalies to `anomalies_report.txt`
+- Bar and pie chart visualizations of log severity counts
+- Interactive mode prompts only when run in a terminal
 
-## 🚀 Project Summary
+## 🧪 Technologies Used
+- Python 3.11+
+- Matplotlib (for charts)
+- GitHub Actions (for CI/CD automation)
 
-This project analyzes application logs to detect anomalies (e.g., error messages) and is set up with a **GitHub Actions workflow** to simulate promotion to a **Test Stage**. It includes:
-- Log parsing and anomaly detection logic  
-- Unit tests for validation  
-- Automated GitHub workflow that installs dependencies, runs tests, and simulates deployment  
-- Severity chart export using `matplotlib`
-
----
-
-## 📁 File Structure
-
+## 📂 Project Structure
 ```
-ai-log-analysis/
 ├── dev/
 │   └── app.py               # Main application script
-├── test/
-│   └── test_app.py          # Unit tests
 ├── logs/
-│   └── sample_logs.txt      # Sample input logs
-├── .github/
-│   └── workflows/
-│       └── promote-to-test.yml  # GitHub Actions pipeline
-├── requirements.txt         # Dependencies
-├── log_severity_summary.png # Output chart image
-└── README.md
+│   └── sample_logs.txt      # Sample input log file
+├── test/
+│   └── test_app.py          # Unit tests for log analysis
+├── .github/workflows/
+│   └── promote-to-test.yml  # GitHub Actions CI script
+├── log_severity_summary.png # Bar chart output
+├── log_severity_pie_chart.png # Pie chart output
+├── anomalies_report.txt     # Exported anomaly logs
+├── requirements.txt         # Dependency file
 ```
 
----
-
-## 🧠 Features
-
-- ✅ **Log Parsing**  
-  Parses log messages line-by-line and identifies lines containing key anomalies (`ERROR`, `WARNING`, `INFO`).
-
-- ✅ **Unit Testing**  
-  Uses Python’s `unittest` to verify that anomaly detection works as expected.
-
-- ✅ **CI/CD with GitHub Actions**  
-  Automatically installs dependencies, runs tests, and simulates deployment on push to `main`.
-
-- ✅ **Severity Chart Export**  
-  Creates and saves a bar chart (`log_severity_summary.png`) showing counts of INFO, WARNING, and ERROR logs.
-
----
-
-## 🧪 Sample Log Anomaly Detection
-
-The following logs:
-```
-INFO: System check complete
-WARNING: Disk usage at 85%
-ERROR: Disk space critically low
-INFO: Backup scheduled
-```
-
-Will detect:
-```
-- WARNING: Disk usage at 85%
-- ERROR: Disk space critically low
-```
-
-And generate this chart:
-
-![Log Severity Summary](log_severity_summary.png)
-
----
-
-## 🔨 Running the Code Locally
-
-1. Clone the repository  
-2. Navigate to the project directory  
-3. Install dependencies:
+## 🚀 Running the Application
+1. Make sure Python and pip are installed.
+2. Install required packages:
    ```bash
    pip install -r requirements.txt
    ```
-4. Run the main analyzer:
+3. Run the application:
    ```bash
    python dev/app.py
    ```
-5. Run the unit tests:
+4. (Optional) Pass a severity filter directly:
    ```bash
-   python -m unittest test/test_app.py
+   python dev/app.py ERROR
    ```
 
----
+## ✅ Sample Output
+- Console log annotations with 🚨 symbols for warnings and errors
+- Summary counts for each severity type
+- Exported anomaly report if selected
+- Saved visual charts in `.png` format
 
-✅ This project simulates a complete DevOps flow using real tools — Python, GitHub Actions, and testable CI pipelines. Great for demos, teaching, and prototypes!
+## 📦 Requirements
+```
+matplotlib
+```
+
+## 🤖 GitHub Actions (CI/CD)
+The `promote-to-test.yml` workflow automates:
+- Checking out code
+- Setting up Python
+- Installing dependencies
+- Running `app.py` during push to main
+
